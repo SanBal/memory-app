@@ -6,16 +6,23 @@ import { useState } from "react";
 
 interface FieldProps {
   field: MemoryCard[][];
+  onFirstCardClick: () => void
 }
 
-const Field: React.FC<FieldProps> = ({ field }) => {
+const Field: React.FC<FieldProps> = ({ field, onFirstCardClick }) => {
   const [fieldState, setField] = useState(field);
+  const [firstCardClicked, setFirstCardClicked] = useState(false)
   const [prevCard, setPrevCard] = useState<MemoryCard | null>(null);
   const [isValidationInProgress, setValidationInProgress] = useState(false);
 
   const repaintField = () => setField([...field]);
 
   const onCardClick = (row: number, col: number) => {
+    if (!firstCardClicked) {
+      onFirstCardClick()
+      setFirstCardClicked(true)
+    }
+
     if (isValidationInProgress) {
       return;
     }
