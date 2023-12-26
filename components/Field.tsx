@@ -83,4 +83,6 @@ const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
   );
 });
 
+Field.displayName = 'Field';
+
 export default Field;

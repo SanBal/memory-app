@@ -36,4 +36,6 @@ const Stopwatch = React.forwardRef<StopwatchRef, StopwatchProps>((props, ref) =>
     )
 })
 
+Stopwatch.displayName = 'Stopwatch';
+
 export default Stopwatch
