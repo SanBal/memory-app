@@ -1,7 +1,8 @@
 "use client";
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { MemoryCard, MemoryCardImpl } from "./Card";
-import Field from "./Field";
+import Field, { FieldRef } from "./Field";
+import Stopwatch, { StopwatchRef } from "./Stopwatch";
 
 const icons = [
   "bicycle",
@@ -26,7 +27,14 @@ const createField = (): MemoryCard[][] => {
 };
 
 const Game = () => {
-  return <Field field={createField()}></Field>;
+  const stopwatch = useRef<StopwatchRef|null>(null);
+  const field = useRef<FieldRef|null>(null);
+  return (
+    <div>
+      <Stopwatch ref={stopwatch} onReset={() => field.current?.reset()}/>
+      <Field ref={field} field={createField()} onFirstCardClick={() => stopwatch.current?.start()}></Field>
+    </div>
+  )
 };
 
 export default Game;

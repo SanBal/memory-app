@@ -1,21 +1,33 @@
 "use client";
-import React from "react";
+import React, { useImperativeHandle } from "react";
 import Card, { MemoryCard } from "./Card";
 import styles from "./Field.module.css";
 import { useState } from "react";
 
-interface FieldProps {
-  field: MemoryCard[][];
+export interface FieldRef {
+  reset: () => void;
 }
 
-const Field: React.FC<FieldProps> = ({ field }) => {
-  const [fieldState, setField] = useState(field);
+export interface FieldProps {
+  field: MemoryCard[][];
+  onFirstCardClick: () => void
+}
+
+const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
+  const [fieldState, setField] = useState(props.field);
+  const [firstCardClicked, setFirstCardClicked] = useState(false)
   const [prevCard, setPrevCard] = useState<MemoryCard | null>(null);
   const [isValidationInProgress, setValidationInProgress] = useState(false);
 
-  const repaintField = () => setField([...field]);
+  const repaintField = () => setField([...props.field]);
+  const reset = () => window.location.reload()
 
   const onCardClick = (row: number, col: number) => {
+    if (!firstCardClicked) {
+      props.onFirstCardClick()
+      setFirstCardClicked(true)
+    }
+
     if (isValidationInProgress) {
       return;
     }
@@ -33,7 +45,7 @@ const Field: React.FC<FieldProps> = ({ field }) => {
         if (fieldState.flat().every((card) => card.isMatched())) {
           setTimeout(() => {
             window.alert("Congrats :) You solved it!");
-            window.location.reload();
+            reset()
           }, 100);
         }
       } else {
@@ -51,10 +63,12 @@ const Field: React.FC<FieldProps> = ({ field }) => {
     }
   };
 
+  useImperativeHandle(ref, () => ({ reset }));
+
   return (
     <div className={styles.field}>
-      {field.map((row, i) => (
-        <div key={i.toString()} className={styles.row}>
+      {props.field.map((row, i) => (
+        <div key={i.toString()} className="inline-flex flex-row justify-space-between gap-4">
           {row.map((card, j) => (
             <Card
               key={`${i},${j}`}
@@ -67,6 +81,6 @@ const Field: React.FC<FieldProps> = ({ field }) => {
       ))}
     </div>
   );
-};
+});
 
 export default Field;

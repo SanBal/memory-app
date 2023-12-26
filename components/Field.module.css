@@ -6,9 +6,3 @@
     padding: 1rem;
     background-color: burlywood;
 }
-.row {
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 1rem;
-}
