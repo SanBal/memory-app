@@ -1,25 +1,30 @@
 "use client";
-import React from "react";
+import React, { useImperativeHandle } from "react";
 import Card, { MemoryCard } from "./Card";
 import styles from "./Field.module.css";
 import { useState } from "react";
 
-interface FieldProps {
+export interface FieldRef {
+  reset: () => void;
+}
+
+export interface FieldProps {
   field: MemoryCard[][];
   onFirstCardClick: () => void
 }
 
-const Field: React.FC<FieldProps> = ({ field, onFirstCardClick }) => {
-  const [fieldState, setField] = useState(field);
+const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
+  const [fieldState, setField] = useState(props.field);
   const [firstCardClicked, setFirstCardClicked] = useState(false)
   const [prevCard, setPrevCard] = useState<MemoryCard | null>(null);
   const [isValidationInProgress, setValidationInProgress] = useState(false);
 
-  const repaintField = () => setField([...field]);
+  const repaintField = () => setField([...props.field]);
+  const reset = () => window.location.reload()
 
   const onCardClick = (row: number, col: number) => {
     if (!firstCardClicked) {
-      onFirstCardClick()
+      props.onFirstCardClick()
       setFirstCardClicked(true)
     }
 
@@ -40,7 +45,7 @@ const Field: React.FC<FieldProps> = ({ field, onFirstCardClick }) => {
         if (fieldState.flat().every((card) => card.isMatched())) {
           setTimeout(() => {
             window.alert("Congrats :) You solved it!");
-            window.location.reload();
+            reset()
           }, 100);
         }
       } else {
@@ -58,9 +63,11 @@ const Field: React.FC<FieldProps> = ({ field, onFirstCardClick }) => {
     }
   };
 
+  useImperativeHandle(ref, () => ({ reset }));
+
   return (
     <div className={styles.field}>
-      {field.map((row, i) => (
+      {props.field.map((row, i) => (
         <div key={i.toString()} className={styles.row}>
           {row.map((card, j) => (
             <Card
@@ -74,6 +81,6 @@ const Field: React.FC<FieldProps> = ({ field, onFirstCardClick }) => {
       ))}
     </div>
   );
-};
+});
 
 export default Field;

@@ -6,7 +6,11 @@ export interface StopwatchRef {
     start: () => void;
 }
 
-const Stopwatch = React.forwardRef<StopwatchRef>((_, ref) => {
+export interface StopwatchProps {
+    onReset: () => void
+}
+
+const Stopwatch = React.forwardRef<StopwatchRef, StopwatchProps>((props, ref) => {
     const [canStart, setCanStart] = useState(false)
     const [seconds, setSeconds] = useState(0)
     const format = (seconds: number) => {
@@ -28,7 +32,7 @@ const Stopwatch = React.forwardRef<StopwatchRef>((_, ref) => {
     })
 
     return (
-        <div>{format(seconds)}</div>
+        <div><i className="fa-solid fa-arrow-rotate-left fa-l" onClick={props.onReset}></i> {format(seconds)}</div>
     )
 })
 
