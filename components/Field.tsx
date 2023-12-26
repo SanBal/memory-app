@@ -68,7 +68,7 @@ const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
   return (
     <div className={styles.field}>
       {props.field.map((row, i) => (
-        <div key={i.toString()} className={styles.row}>
+        <div key={i.toString()} className="inline-flex flex-row justify-space-between gap-4">
           {row.map((card, j) => (
             <Card
               key={`${i},${j}`}
