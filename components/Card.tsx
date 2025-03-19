@@ -44,12 +44,17 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ icon, onClick, showIcon }) => {
+  let iconElement: JSX.Element | null = null
+
+  if (showIcon) {
+    iconElement = <i className={`fa-solid fa-${icon} fa-2xl`}></i>
+  }
+
   return (
     <div
       className={`${styles.card} ${showIcon ? styles.show : ""}`}
-      onClick={onClick}
-    >
-      {showIcon && <i className={`fa-solid fa-${icon} fa-2xl`}></i>}
+      onClick={onClick}>
+      {iconElement}
     </div>
   );
 };
