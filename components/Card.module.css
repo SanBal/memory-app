@@ -17,3 +17,17 @@
 .card:hover {
     transform: scale(1.02);
 }
+
+@media (max-width: 1200px) {
+    .card {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .card {
+      width: 60px;
+      height: 60px;
+    }
+  }
