@@ -1,13 +1,4 @@
 import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'Memory',
-  description: 'Memory game created with Next.js',
-}
 
 export default function RootLayout({
   children,
@@ -16,7 +7,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="flex justify-center items-center p-1">{children}</body>
+      <body className="flex justify-center items-center p-1 bg-gradient-to-r from-violet-100 to-fuchisia-100 to-rose-100">{children}</body>
     </html>
   )
 }
