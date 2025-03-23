@@ -1,30 +1,25 @@
 "use client";
-import React, { useImperativeHandle } from "react";
+import React, { useEffect, useImperativeHandle } from "react";
 import Card, { MemoryCard } from "./Card";
 import styles from "./Field.module.css";
 import { useState } from "react";
-
-export interface FieldRef {
-  reset: () => void;
-}
 
 export interface FieldProps {
   field: MemoryCard[][];
   onFirstCardClick: () => void
 }
 
-const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
-  const [fieldState, setField] = useState(props.field);
+const Field: React.FC<FieldProps> = ({field, onFirstCardClick}) => {
+  const [fieldState, setField] = useState(field);
   const [firstCardClicked, setFirstCardClicked] = useState(false)
   const [prevCard, setPrevCard] = useState<MemoryCard | null>(null);
   const [isValidationInProgress, setValidationInProgress] = useState(false);
 
   const reset = () => window.location.reload()
 
-
   const onCardClick = (row: number, col: number) => {
     if (!firstCardClicked) {
-      props.onFirstCardClick()
+      onFirstCardClick()
       setFirstCardClicked(true)
     }
 
@@ -60,7 +55,12 @@ const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
     }
   };
 
-  useImperativeHandle(ref, () => ({ reset }));
+  useEffect(() => {
+    setField(field)
+    setFirstCardClicked(false)
+    setPrevCard(null)
+    setValidationInProgress(false)
+  }, [field])
 
   return (
     <div className={styles.field}>
@@ -78,7 +78,7 @@ const Field = React.forwardRef<FieldRef, FieldProps>((props, ref) => {
       ))}
     </div>
   );
-});
+};
 
 Field.displayName = 'Field';
 
