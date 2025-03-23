@@ -7,15 +7,14 @@ import { useState } from "react";
 export interface FieldProps {
   field: MemoryCard[][];
   onFirstCardClick: () => void
+  onFinish: () => void
 }
 
-const Field: React.FC<FieldProps> = ({field, onFirstCardClick}) => {
+const Field: React.FC<FieldProps> = ({field, onFirstCardClick, onFinish}) => {
   const [fieldState, setField] = useState(field);
   const [firstCardClicked, setFirstCardClicked] = useState(false)
   const [prevCard, setPrevCard] = useState<MemoryCard | null>(null);
   const [isValidationInProgress, setValidationInProgress] = useState(false);
-
-  const reset = () => window.location.reload()
 
   const onCardClick = (row: number, col: number) => {
     if (!firstCardClicked) {
@@ -36,10 +35,7 @@ const Field: React.FC<FieldProps> = ({field, onFirstCardClick}) => {
         currCard.setMatched(true);
         setPrevCard(null);
         if (fieldState.flat().every((card) => card.isMatched())) {
-          setTimeout(() => {
-            window.alert("Congrats :) You solved it!");
-            reset()
-          }, 100);
+          onFinish()
         }
       } else {
         setValidationInProgress(true);

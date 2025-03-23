@@ -1,7 +1,7 @@
 "use client";
 import React, { Component, useRef, useState } from "react";
 import { MemoryCard, MemoryCardImpl } from "./Card";
-import Field, { FieldRef } from "./Field";
+import Field from "./Field";
 import Stopwatch, { StopwatchRef } from "./Stopwatch";
 
 const icons = [
@@ -34,11 +34,19 @@ const Game = () => {
     setField(createField())
   }
 
+  const finish = () => {
+    setTimeout(() => {
+      window.alert("Congrats :) You solved it!");
+      stopwatch.current?.reset()
+    }, 100);
+  }
+
   return (
     <div>
       <Stopwatch ref={stopwatch} onReset={(reset)}/>
       <Field field={field}
-             onFirstCardClick={() => {stopwatch.current?.start()}}></Field>
+             onFirstCardClick={() => {stopwatch.current?.start()}}
+             onFinish={finish}></Field>
     </div>
   )
 };

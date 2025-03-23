@@ -4,6 +4,7 @@ import { useEffect } from "react"
 
 export interface StopwatchRef {
     start: () => void;
+    reset: () => void;
 }
 
 export interface StopwatchProps {
@@ -34,7 +35,7 @@ const Stopwatch = React.forwardRef<StopwatchRef, StopwatchProps>((props, ref) =>
     }
 
     // Expose the method through the ref
-    useImperativeHandle(ref, () => ({ start }));
+    useImperativeHandle(ref, () => ({ start, reset }));
 
     useEffect(() => {        
         if (canStart) {
